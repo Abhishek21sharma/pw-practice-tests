@@ -1,0 +1,20 @@
+{
+  "name": "pw-practice-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pageObjects-chrome": "npx playwright test usePageObjects.spec.js --project=chromium",
+    "pageObjects-firefox": "npx playwright test usePageObjects.spec.js --project=firefox",
+    "pageObjects-all": "npm run pageObjects-chrome && npm run pageObjects-firefox"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.1",
+    "dotenv": "^17.2.3"
+  }
+}
