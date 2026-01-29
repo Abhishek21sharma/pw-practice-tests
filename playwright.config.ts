@@ -58,12 +58,16 @@ export default defineConfig<TestOptions>({
     //baseURL: "http://localhost:4200/",
     //AS: we can also manage baseURL without using the projects.. using the js way:
     //look how we are adding more conditions to this ternary operator..
+    //this is ternary operator.. BASICALLY CHAINING OF TERNARY OPERATOR
     baseURL:
+      // condition1 ? do this if true : (else do this now this is
+      // also another condition
+      // ? : do this if true and also last default block :)
       process.env.DEV === "1"
         ? "http://localhost:4200/"
         : process.env.ST === "1" //AS this is for DEV URL
-        ? "http://localhost:3000/" // AS -- this is for ST ENV
-        : "http://localhost:4200/", //AS -- the default URL
+          ? "http://localhost:3000/" // AS -- this is for ST ENV
+          : "http://localhost:4200/", //AS -- the default URL
 
     globalsQaURL: "https://www.facebook.com/", //<-- look at the test-options.ts file, how we declared this variable there..
     //look at the sameple.spec.js file --> how we used the URL OR we can say this variable there...
@@ -122,15 +126,23 @@ export default defineConfig<TestOptions>({
     {
       name: "likeCounter",
       testMatch: "likeCounter.spec.js",
-      use: { ...devices["Desktop Chrome"], storageState: ".auth/user.json" },
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: ".auth/user.json",
+        //default URL for this project.. baseURL: "",
+      },
       //AS -- this will start the project = setup as before running this..
       dependencies: ["articleSetup"],
     },
 
-    // {
-    //   name: "firefox",
-    //   use: { ...devices["Desktop Firefox"] },
-    // },
+    {
+      name: "firefox",
+      //browser name can be given like this::
+      use: {
+        browserName: "firefox",
+      },
+      // use: { ...devices["Desktop Firefox"] },
+    },
 
     // {
     //   name: "webkit",

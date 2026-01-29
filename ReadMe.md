@@ -10,6 +10,8 @@ https://playwright.dev/docs/test-agents
 //check for udemy courses which you learn: from Artem Bondar,Rahul Shetty
 //also can check out for playwright AI usage , there are several courses for them in udemy
 
+tsconfig.json -> create this file , this is also very plus for our projects. It provides a lot of useful tricks for playwright tests and code in general.
+
 clone the application project using: https://github.com/bondar-artem/pw-practice-app.git
 we will delete this project from my local since it's very big:: ~1 GB
 
