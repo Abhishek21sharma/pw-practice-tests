@@ -87,3 +87,49 @@ as part of revising the concepts, have created this file..
    body: JSON.stringify(responseBody)
    })
    })
+
+8. API request : fixture for that: request
+   //post req
+   const response = await request.post('/api/users/login',{
+
+   data: {
+   //this is request payload
+   }
+
+   });
+
+   const resBody = await response.json();
+   const token = resBody.user.token;
+
+   //create article post call
+   //pass the token in header..
+
+   await request.post('end point URL', {
+   data: {
+   //payload here
+   },
+   headers: {
+   Authorization: 'Token ' + token;
+   }
+   })
+
+9. In tercepting browser requestS --> Getting backend response from UI click call
+   AFter the UI button is clicked, it sends a request to backend..
+   we will wait until the request is completed and store the response in a variable
+   now we use that to get the response
+   METHOD:: after clicking the page it triggers the backend call and we will wait for the
+   response of that call
+   const res = await page.waitForResponse('URL')
+   const resJSON = await res.json();
+   const slugId = resJSON.article.slug;
+   //now we have slug ID , we can form the URL and make a next request..
+
+10. sharing API token to all scripts.. all approaches to the best -->
+    there are multiple ways:
+    first one is setting up the token directly to JS windows..
+    let's take the token from the login api call -->
+    now, add a function/script directly to the JS using playwright method :
+    await page.addInitScript( value => {
+    //add a key value pair.. we can check this from our local storage setting -> network req -> Application --> storage -> local storage --> endpoint
+    window.localStorage.setItem('token',value)
+    }, token); //this token is assigned to 'value' ...
