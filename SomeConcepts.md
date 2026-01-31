@@ -113,7 +113,17 @@ as part of revising the concepts, have created this file..
    }
    })
 
-9. In tercepting browser requestS --> Getting backend response from UI click call
+   also we can use route method to update the requests as well..
+   we can tell playwright, okay this URL and hit the request but wait.
+   hold on and update the query or path parm and then complete the requests
+   method is : route.continue({url: 'updatd url})
+   await page.route('url', route => {
+   await route.continue({url: ''})
+   })
+   //check the documentation for playwright route method or even anything else
+   they really have a strong documentation and application support.
+
+9. In-tercepting browser requestS --> Getting backend response from UI click call
    AFter the UI button is clicked, it sends a request to backend..
    we will wait until the request is completed and store the response in a variable
    now we use that to get the response
