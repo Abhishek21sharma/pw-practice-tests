@@ -143,3 +143,70 @@ as part of revising the concepts, have created this file..
     //add a key value pair.. we can check this from our local storage setting -> network req -> Application --> storage -> local storage --> endpoint
     window.localStorage.setItem('token',value)
     }, token); //this token is assigned to 'value' ...
+    Sharing whole state: check the auth.setup.ts file
+    do the pw login using pw.goto('') then click on locators..
+    then refer to a new file where we going to save our changes to:
+    const authFile = '.auth/user.json' (make sure this file is added in gitignore as we don't want this to be commited to git)
+
+    note: we need to be able to login before we hit the following line..
+    now, save details to this file:
+    await page.context().storageState({path:authFile})
+
+now, update your playwright config file to: inside project section, create a new project
+'setup'
+[
+name: 'setup',
+testMatch: 'auth.setup.ts'
+]
+now other projects will be dependent on this project.. and also we can pass the
+storage state to this project to
+{
+name: 'chromium',
+use:{ ...devices['Desktop Chrome'], storageState: '.auth/user.json'},
+dependency: ['setup']
+}
+
+Also, who'ever needed token, now they can use this file to get the token as well.
+they need to import this file and start to read the file with Dot notation and get the details
+as JSON is essentially Java Script (Object Notation)
+so in the file which needs token:
+import users from '.auth/user.json'
+then
+const token = users.origins[0].localStorgae.value ;
+and used inhour scipts..
+
+also to note that, in .auth/user.json file ->the unique thing is token
+and rest all is static piece of code always, so what we can do is instead of
+making a UI login everytime in 'setup project' , we can do is making an API request for the login
+and collect the token.
+then in the .auth/user..json file -> update the token with the new token and save the file
+and now tell your code to use this file further.
+//to do this
+import fs from 'fs'
+import user from '.auth/users.json'
+
+//make api request to get the token
+token = response.token;
+//now update user.token
+user.origins[0].localStrogae[0].value = token
+
+//now write this to the file and save it
+fs.writeFileSync(authFile,JSON.stringify(user))
+
+Also since we have a token now and it's getting collected as a very first step
+we can share this with other steps as well who needs this,
+so above: from auth.setup.js -> once we have token with us and we have written it to a file
+we will assign it to process.env variable
+and all other tests who needs this, will call this ENV variable to take the data
+
+process.env['ACCESS_TOKEN'] = token
+
+how to use it:
+in the other files , we can use it by calling process.env.ACCESS_TOKEN
+or else 1 time setting would be:
+in playwright config file in the GLOBAL 'use' block:
+use: {
+extraHTTPHeader: {
+'Authorization': `Token ${process.env.ACCESS_TOKENg}`
+}
+}
