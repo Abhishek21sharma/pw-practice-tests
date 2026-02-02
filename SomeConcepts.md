@@ -210,3 +210,53 @@ extraHTTPHeader: {
 'Authorization': `Token ${process.env.ACCESS_TOKENg}`
 }
 }
+
+<<<<<<---------------UI AUTOMATION-------------->>>>>>
+
+11. UI Automation: Main thing is locator chaining stratergy and best practices for locator finding
+    and also the 'waiting' mechanism and in-built locators which playwright provides with best practices
+
+    Also important when selecting overlay contents::
+    sometimes the things are present on the DOM just on the fly - they are called overlay containers
+    Like: whe we select a box, it shows the list only then.
+    Also when we try to get the element by right click OR any other way, it just doesn't work and immediately disappear.
+    To Handle this: Go to webApp -> F12 -> go to JS console.
+    then use the debugger after lets say 5 secs and it will freeze the wondow and then we can use the locator etc.
+    setTimeout(function(){debugger},5000); //wait for 5 secs before starting a debugger in the UI
+
+Also, in playwright, if the broswer is opened (after execution) and we go to some locator
+(this is even after the execution is finished), and point to some locator in our script. It will highlight the same in the UI browser.
+Same like if we do debbuger using page.pause(), then it will help us to select the elements..
+also in trace viewr as well , very special and can be used for this
+
+    we will keep updating this::
+    best strategy is to create a re-usable locator for DOM parent block
+    staring from there we can navigate down-words and then choose what we want
+    The parent locator can be used when finding/searching for another locator..
+
+    one example here: this is an E2E example from Nitro search component::
+
+    const selectEntityDropDown = page.locator('.search-component-wrapper .v-field__field',
+    {hasText:'Select an entity}
+    );
+    //in above locator strategy
+    when the locator returns lets say 3 elements, and we want to further shorten this by using
+    text strategy : we can use the above..
+    //also it's similar to 'filter()', just difference is it's in-built with locator() itself
+
+    const allEntities = page.locator('.v-list .v-list-item') //returns all elements in the list of dropdown
+    await allEntities.filter({hasText: 'Service Delivery'}).click()
+    sometimes , there could be multi elemtns matching the text then we can use the strict matching like below:
+    await allEntities.filter({has: page.getByText('Service Delivery',{exact:true})}).click()
+
+    locator chaining:
+    await page.locator('.search-component-wrapper .v-field__field').filter({hasText: 'Enter the identifier'}).locator('input').fill('CID_CASES_17682198)
+
+    getByRole::
+    const searchButton  = page.getByRole('button', {name:'SEARCH'})
+    //list from getByRole
+    if list is part of <li> or <ui> html tags then use this
+    page.getByRole('list',{name:''})
+
+
+    locator strategy using css ::
