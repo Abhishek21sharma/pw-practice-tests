@@ -21,6 +21,8 @@ we will delete this project from my local since it's very big:: ~1 GB
    to open the application in browser type
 3. localhost:4200
 
+to run the test in another cool mode called ui mode: npx playwright --ui
+
 now for playwright tests::
 
 1. install playwright using:

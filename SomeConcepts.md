@@ -260,3 +260,4 @@ also in trace viewr as well , very special and can be used for this
 
 
     locator strategy using css ::
+    follow the pkg used for : revisit ui tests
