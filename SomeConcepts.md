@@ -258,6 +258,39 @@ also in trace viewr as well , very special and can be used for this
     if list is part of <li> or <ui> html tags then use this
     page.getByRole('list',{name:''})
 
+//look how we created the locators::
+page.locator(nb-radio-group nb-radio) --> we didn't use .(DOT) since it is not the class
+it's the tag itslef..
+so we can use it this way as well.. just give the tag name and followed by child tag under it
+
+index of the element (very unlikey to use)
+page.locator('nb-card').nth(3).click()
+
+//IMPORTANT to find the exact child element
+filter() method is very useful AND as well--> also locator('locator', {text:'value'})
+so, idea is we will find a parant panel and out of the returning elements, we will use
+filter on them or locator (,{text: value}) to select the desired element..
+
+page.locator('nb-card').filter({has: page.getByRole('radio',{name: 'Option1'})});
+
+locator chaining another example::
+//locator chaing example..
+const form1 = page.locator("nb-card"); //re-useable variable of the type 'locator'
+const radionOption1 = form1.filter({
+has: page.getByRole("radio", { name: "Option1" }),
+});
+const radionOption2 = form1.filter({
+has: page.getByRole("radio", { name: "Option2" }),
+});
+
+await radionOption1.click();
+await radionOption2.isChecked();
 
     locator strategy using css ::
     follow the pkg used for : revisit ui tests
+
+auto-waiting:
+approach a - await radionOption1.waitFor({ state: "attached" }); //it will wait until default to 30 secs
+approach b - await radionOption1.waitFor({ timeout: 15000 }); //wait until 15 secs for this element..
+//also we can use page itself to wait for the element rather then element waiting
+await page.waitForSelector('.bg-success');

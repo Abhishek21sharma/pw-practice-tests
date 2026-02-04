@@ -24,6 +24,9 @@ test("auto wait", async ({ page }) => {
   // we can add it in there
   await uiMsg.waitFor({ state: "attached" });
 
+  //also for hardcoading blocking the page like thread.sleep(), it's not recommended here but if we want to use it:
+  await page.waitForTimeout(10000); //10 secs
+
   //or simply
   uiMsg.waitFor();
   const msgLocator = page.locator(".b-success");

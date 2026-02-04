@@ -32,4 +32,65 @@ test("@smoke locator stratergy", async ({ page }) => {
 
   //BEST use case:::
   //apply approach 1 with locator chainging in real world codebases/projects
+
+  //user facing locators..
+  page.getByRole("button", { name: "Sign In" });
+
+  page.getByLabel("Email").first().click();
+
+  //Child elements....
+  //look how we created the locator
+  //it's  like tag1 and under that tag(DOM) findthe next locator/html tag that is: nb-radio..
+  page.locator("nb-radio-group nb-radio");
+
+  //both are similar
+  page.locator("nb-radio-group").locator("nb-radio").first().click();
+
+  page
+    .locator("nb-radio-group")
+    .getByRole("button", { name: "Sign in" })
+    .first()
+    .click();
+
+  //more powerful way to find locators..
+  page.locator("nb-card", { hasText: "Using the Grid" });
+  //how it works is, it will check the returning locators for nb-card and lets say 3 locators returned
+  //now pw will check that which one will have this text 'Using the Grid' and return that only element
+
+  //another way is:
+  //using the any other locator stretgy inside the locator to select the unique ele
+  page.locator("nb-card", { has: page.locator("value") }); //so here we are giving the locator sysntax only
+  //above can be combined with filter method too
+
+  page.locator("nb-card").filter({ hasText: "Using the Grid" }); //very useful
+
+  //look how decently we have handled this
+  page
+    .locator("nb-card")
+    .filter({ has: page.getByRole("radio", { name: "Option1" }) });
+
+  //locator chaing example..
+  const form1 = page.locator("nb-card"); //re-usable variable named form1 of the type 'locator'
+  const radionOption1 = form1.filter({
+    has: page.getByRole("radio", { name: "Option1" }),
+  });
+  const radionOption2 = form1.filter({
+    has: page.getByRole("radio", { name: "Option2" }),
+  });
+
+  await radionOption1.click();
+  await radionOption2.isChecked();
+
+  //AUTO_WAITING:
+  //mostly pw do auto-waiting for most methods like click, textContent..
+  //we can check the  list from docs
+  //but if it's not the case for our element
+  //we can do wait until the element is attached to the UI
+  await radionOption1.waitFor({ state: "attached" }); //it will wait until default to 30 secs
+
+  //or also can explictly mention the timeout
+  await radionOption1.waitFor({ timeout: 15000 }); //wait until 15 secs for this element..
+
+  //also we can use page itself to wait for the element rather then element waiting
+  await page.waitForSelector(".bg-success");
 });

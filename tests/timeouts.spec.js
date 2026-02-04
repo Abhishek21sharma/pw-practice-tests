@@ -5,7 +5,7 @@ test("timeouts...", async ({ page }) => {
   //test timeout.. default to 30000 ms = 30 secs.. we can update it in 'config.js
   //by adding a another variable timeout:xxxx value
 
-  //action timeout.. default no timeout.. eg: click(), fill(), textContent()... (it will b)
+  //action timeout.. default to timeout.. eg: click(), fill(), textContent()... (it will b)
   //navigation timeout.. default no timeout.. eg: page.goto()..
   //expect timeout.. default to 5000 ms (5 secs)
 
