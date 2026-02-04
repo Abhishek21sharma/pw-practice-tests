@@ -289,8 +289,38 @@ await radionOption2.isChecked();
     locator strategy using css ::
     follow the pkg used for : revisit ui tests
 
-auto-waiting:
+12. auto-waiting:
+
 approach a - await radionOption1.waitFor({ state: "attached" }); //it will wait until default to 30 secs
 approach b - await radionOption1.waitFor({ timeout: 15000 }); //wait until 15 secs for this element..
 //also we can use page itself to wait for the element rather then element waiting
 await page.waitForSelector('.bg-success');
+
+TImeouts::
+Global timeout -- total duration of the Test suite (let's say 4-4 hours max) -- default not configured
+Test Timeout -- 30 sec default.. (it has 3 sub parts) (Have more priority compared to sub-timeouts like below)
+(above are configured at global level in config file)
+
+(below timeouts are declared within 'use' block) --> check the playwright.config file
+
+- Action timeout - like click() etc (30 secs default)
+- nsvigstion timeout - like page.goto("/") (no default)
+- expect timeout - like expect() (default is 5 secs)
+
+so if action timeout is set to 30 and test timeout is set to 40. then action command will follow
+action timeout only which is 30 secs, as test timeout defines the max time is allowed for
+a specific timeout..
+but if action timeout is 50 secs and test timeout is default to 30 then action timeout will wait till 30 secs only as it is the sub-set of test timeout so it has to be within this limit
+
+also another interesting fact: we can always override the action timeouts within the method as well
+and that will take the precedence compared to config file...
+await page.locator('').click({timeout: 50000}) //--> look here we aresaying here wait until 50 secs for this click event
+
+test.slow() --> we can define this in any test and it will wait default/defined in config file X 3 times.. used when a test is slow
+
+also we can define a test to be slow at a test level from something like:
+testInfo param from the test() method, then testInfo.setTimeout()..
+see the ui-revisit file.. testInfo.setTimeout(testInfo.timeout + 2000);
+
+expect can also be increased in the config file.. in the global section
+check the pw config file..

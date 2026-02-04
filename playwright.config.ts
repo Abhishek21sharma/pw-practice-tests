@@ -51,8 +51,8 @@ export default defineConfig<TestOptions>({
     //can also defined custome browser (As default one::)
     //browserName: "chromium",
     //AS -- use block to configure action level timeoutss liek this::
-    //actionTimeout: 10000,
-    //navigationTimeout: 10000,
+    //actionTimeout: 10000, --> for action commands like click() , fill()
+    //navigationTimeout: 10000, --> like page.goto('/')
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
     //baseURL: "http://localhost:4200/",

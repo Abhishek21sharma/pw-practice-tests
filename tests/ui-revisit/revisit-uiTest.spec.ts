@@ -1,6 +1,8 @@
 import { test } from "@playwright/test";
 
-test("@smoke locator stratergy", async ({ page }) => {
+test("@smoke locator stratergy", async ({ page }, testInfo) => {
+  testInfo.setTimeout(testInfo.timeout + 2000); //this means that increase the default timeout
+  //to +2 secs just for this tests as this maybe a slow test
   //by tag + attribute
   //page.locator('input[placeholder="Email"]'); //find such a input tag where placeholder = Email
   //css --> using .(DOT) then the class name.
