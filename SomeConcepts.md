@@ -324,3 +324,67 @@ see the ui-revisit file.. testInfo.setTimeout(testInfo.timeout + 2000);
 
 expect can also be increased in the config file.. in the global section
 check the pw config file..
+
+13: UI components -
+to fill in the UI using fill() method
+but simulate keyboard typing using:
+locator('').pressSequentially('xyz..')
+to give delay between typing::
+locator('').pressSequentially('xyz..', {delay: 500}) //half a sec delay
+
+//to get the input value we typed..
+const inputVal = locator('').inputValue();
+
+//IMPORTANT--->
+all of these locator methods like .check() (to check radio checkbox) or click() etc
+these method doesn't work if the class is marked as visiblity:hidden
+so in order to deal with such use case, pw came with ::
+check({force:true})
+//forcefully doing something even if UI doesn't allow us that
+isChecked() will return the status...
+
+checkboxes-->
+check() -> check the status of the checkbox, if it's not checked it will simply checked it
+this is better than smiply clicking the element and making it check and un-check..
+
+uncheck().. opposite of check()
+
+also by default, try to use 'getByRole('checkbox',{name:''})
+
+//checking all checkboxes.. look at the file for details (spec file ui-revist)
+await allBoxes.all();
+where allBoxes --> it's a locator
+to convert it to a array of locators , we need to use all method on it ..
+note: everything will be wrapped up in await block since .all() method returns a promise..
+
+IMPORTANT
+for(const box of await allBoxes.all()){
+//box.METHOD do soemthing..
+await box.check(force:true)
+}
+
+Mpw methods..
+we can call a method either OR way like below::
+page.locator('item').click() --> Approach A
+page.click('item') --> Approach B
+
+both are correct, look at the method signatures to undertand more of it..
+
+hover() ->
+await page.locator("main-menu").hover();
+await page.locator(".sub-menu").waitFor({ state: "visible", timeout: 10000 });
+await page.locator('.sub-menu').click();
+
+chianing::
+//we can also chained all this expressions like below as this returns promise<>
+await page
+.locator("menu")
+.hover()
+.then(() => page.locator("sub-menu").hover())
+.then(() => page.locator("sub-menu").click);
+
+we can also do mouse simulation..
+using:
+page.mouse.move(menu.x + menu.width/2, menu.y + menu.height/2)
+page.mouse.move(sub-menu.x + sub-menu.width/2 , sub-menu.y + sub-menu.height/2)
+page.mosue.click(sub-menuItem.x + sub-menuItem.wid)

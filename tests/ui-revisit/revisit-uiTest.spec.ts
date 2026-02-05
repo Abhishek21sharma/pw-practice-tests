@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 test("@smoke locator stratergy", async ({ page }, testInfo) => {
   testInfo.setTimeout(testInfo.timeout + 2000); //this means that increase the default timeout
@@ -95,4 +95,38 @@ test("@smoke locator stratergy", async ({ page }, testInfo) => {
 
   //also we can use page itself to wait for the element rather then element waiting
   await page.waitForSelector(".bg-success");
+
+  //checking all boxes..
+  const allBoxes = page.getByRole("checkbox"); //this will give all checkboxes on the page
+  //note above is returning as locator..
+  //to convert it to array, since we know it will not just return the single element
+  //we have to use the locator method all..
+  //this will convert it to a list of locators
+
+  //since allboxes.all() returns a promise , it has to be await
+  for (const box of await allBoxes.all()) {
+    await box.check({ force: true });
+    expect(await box.isChecked()).toBeTruthy(); //validation..
+  }
+
+  //Hover and click on submenu
+  await page.hover("main-menu");
+  //this is also correct
+  await page.locator("main-menu").hover();
+  await page.locator(".sub-menu").waitFor({ state: "visible", timeout: 10000 }); //waiting for sub-menu
+  await page.hover(".sub-menu"); //hover on the sub-menu
+  await page.locator(".sub-menu-Item").waitFor({ state: "visible" }); //wait for sub-menu-item to be visible
+  await page.locator(".sub-menu-item").click();
+  //this is also correct
+  await page.click(".sub-menu-Item");
+
+  //we can also chained all this expressions like below as this returns promise<>
+  await page
+    .locator("menu")
+    .hover()
+    .then(() => page.locator("sub-menu").hover())
+    .then(() => page.locator("sub-menu").click);
+
+  //Drag and Drop iFrame..
+  //use this link https://www.globalsqa.com/demo-site/draganddrop/
 });
