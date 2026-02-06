@@ -129,4 +129,71 @@ test("@smoke locator stratergy", async ({ page }, testInfo) => {
 
   //Drag and Drop iFrame..
   //use this link https://www.globalsqa.com/demo-site/draganddrop/
+  //2 approaches
+  //using in-built() 'dragto() method
+  //using mouse hover..
+
+  //dealingwith iframes.. collecting root of the iframe.. iframe is the part of this html tag 'Photo Manager'
+  // here                          locator1 locator2
+  const frame = page.frameLocator("[rel-title='Photo Manager'] iframe");
+
+  await frame
+    .locator("li", { hasText: "High Tatras 2" })
+    .dragTo(frame.locator("#trash"));
+
+  //approach 2
+  //best approach
+
+  await frame.locator("li", { hasText: "High Tatras 4" }).hover();
+  await page.mouse.down();
+  //now move the mouse where we want to drop the ele
+  await frame.locator("#trash").hover();
+
+  //now release the mouse:
+  await page.mouse.up();
+
+  //////SLIDER autoamtion
+  //like temperature change etc, in the Hivemobile app we used to pick the slider and change the
+  //colour of the bulb etc
+
+  //so x and y cordinates will change (in the UI we can see) if we update the slider
+  //step1 -> get the locator(where these co-ordinates are defiend..)
+  const tempGauge = page.locator(
+    '[tabtitle="Temperature"] ngx-temperature-dragger circle',
+  );
+
+  //this is the JS way to set/get the co-ordinates..
+  await tempGauge.evaluate((node) => {
+    node.setAttribute("cx", "232.630");
+    node.setAttribute("cy", "232.630");
+  });
+
+  //now to engage on the changes. perform any action on the ui like below::
+  await tempGauge.click();
+
+  //BEST approach for slider updates
+  //using mouse movement
+
+  const tempBox = page.locator(
+    '[tabtitle="Temperature"] ngx-temperature-dragger',
+  );
+
+  await tempBox.scrollIntoViewIfNeeded();
+
+  //define bounding box (where we want to move. x cordinate and y coordinae values)
+  const box = await tempBox.boundingBox();
+  //center co-ordinate using simple maths
+  const x = box ? box.x + box.width / 2 : 0;
+  const y = box ? box.y + box.height / 2 : 0;
+
+  //move mouse to center of the locator screen
+  await page.mouse.move(x, y);
+  //move to down
+  await page.mouse.down();
+
+  //move towards rights
+  await page.mouse.move(x + 100, y);
+
+  //release the mouse
+  await page.mouse.up();
 });

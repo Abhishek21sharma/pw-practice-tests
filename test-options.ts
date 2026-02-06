@@ -23,9 +23,12 @@ export const test = base.extend<TestOptions>({
       await page.getByText("Forms").click();
       await page.getByText("Form Layouts").click();
       //need to make 'use' now
-      await use("");
+      await use(""); // whatever is in use, it will be returned to calling method..
     },
-    { auto: true },
+    { auto: true }, // it means that we don't want to add that inside our test() method
+    //since we don't want this to be returned to us for further use, we only want this
+    //to be triggered just once
+    //so we enabled auto:true on this...
   ],
 
   //pageManager: async({page},use) => {

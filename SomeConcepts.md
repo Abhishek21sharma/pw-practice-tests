@@ -143,6 +143,7 @@ as part of revising the concepts, have created this file..
     //add a key value pair.. we can check this from our local storage setting -> network req -> Application --> storage -> local storage --> endpoint
     window.localStorage.setItem('token',value)
     }, token); //this token is assigned to 'value' ...
+
     Sharing whole state: check the auth.setup.ts file
     do the pw login using pw.goto('') then click on locators..
     then refer to a new file where we going to save our changes to:
@@ -388,3 +389,60 @@ using:
 page.mouse.move(menu.x + menu.width/2, menu.y + menu.height/2)
 page.mouse.move(sub-menu.x + sub-menu.width/2 , sub-menu.y + sub-menu.height/2)
 page.mosue.click(sub-menuItem.x + sub-menuItem.wid)
+
+//dealing with iFrames : frames (encoded DOM) whhich have there own <html> <head> and <body> and everything is part of <iframe>
+method : await page.frameLocator('locator') --> this will tell pw that locator is part of iframe
+
+//dealingwith iframes.. collecting root of the iframe.. iframe is the part of this html tag 'Photo Manager'
+// here locator1 locator2
+const frame = page.frameLocator("[rel-title='Photo Manager'] iframe");
+
+await frame.locator("li", { hasText: "High Tatras 2" }).click();
+
+Drag and drop
+a: await frame.locator("li", { hasText: "High Tatras 2" }).dragTo(frame.locator('#trash'));
+b: cosidered bette approach : check the ui file re-visit file..
+await page.mouse.down(); and await page.mouse.up() ; (at the other locator)
+
+List / Drop-Downs : look at the nitro example above..
+can be used a normal locator OR using getbyRole('list',{nsmr: ''}) / or 'listItem'
+to note: it's recognized by getByRole() when list has UL tag
+listITem has LI tag
+all other cases use 'locator()' strategy..
+
+ToolTip::
+Not easy to find in DOM.. but it's overlay, as described above, use debugger and stop the screen from JSconsole in the UI
+then we can use the locator for them..
+setTimeout(function(){debugger},5000);
+
+OR else:
+go to network > Source > press (command + / ) (on MAC) OR F8 --> to start the debugger and freze the screen
+
+BROWESR dialog boxes accept()/decline()
+pw -> BY DEFAUlT - it cancels it
+
+but in some cases, we need to accept it
+
+best way is to create a listner..
+page.on('dialog', dialog => {
+//check if the dialog exists.. and accept it
+expect(dialog.message()).toEqual('Are you sure want to delete?')
+dialog.accept()
+})
+
+scroll method:::
+await locator().scrollIntoViewIfNeeded()...
+check the slider update code in the ui-revist file..
+
+14. PoM -
+    check the ui- revision >> Page classes
+    until we don't define anything in constructor, the property will show red error
+    we need to define it in constructor OR define it as undefined initially..
+
+//Very import , if whatever method is 'async' and when we are calling it
+we must use 'await' to avoid any errors
+pw recommends to keep all locators outside from the actual functional methods
+and define them all inside constructor block and then use it.
+pm -> look how we handle the objects
+helperBase - inheritance
+(all generic methods will go here)
