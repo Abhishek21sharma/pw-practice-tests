@@ -9,6 +9,8 @@ https://playwright.dev/docs/test-agents
 //playwright api testing
 //check for udemy courses which you learn: from Artem Bondar,Rahul Shetty
 //also can check out for playwright AI usage , there are several courses for them in udemy
+//also check - build a simple UI using JS with some click events etc and which should do some work for us which is day to day required for QA .
+// also check why we built backend using Python or Java and not just in TS/JS or similar (angular or react ??) --> what is that it is lacking actually ?
 
 tsconfig.json -> create this file , this is also very plus for our projects. It provides a lot of useful tricks for playwright tests and code in general.
 
