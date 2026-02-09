@@ -446,3 +446,7 @@ and define them all inside constructor block and then use it.
 pm -> look how we handle the objects
 helperBase - inheritance
 (all generic methods will go here)
+
+very important , sometime a .JSON file we are importing thorws some error msgs,
+best in that case is to be 'import' it and provide a type in the end 'with' syntax:
+import person from '../path_to_json_file' with {type: 'json'}
