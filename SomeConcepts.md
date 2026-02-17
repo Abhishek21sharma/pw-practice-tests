@@ -450,3 +450,58 @@ helperBase - inheritance
 very important , sometime a .JSON file we are importing thorws some error msgs,
 best in that case is to be 'import' it and provide a type in the end 'with' syntax:
 import person from '../path_to_json_file' with {type: 'json'}
+
+15. to download cucumber for playwright
+    https://github.com/cucumber/cucumber-js
+
+    download cucumber plugin from extensions
+    cucumber suggestes to create a folder called feature > all cucumber level details will go here
+    one cucumber example::
+    @And(^I (should/should not) be able to access the search button$")
+    public void accessSearchButton(String negation){
+    boolean shouldAccess = negation.equals("should")// it retuns boolean
+
+    to run a feature file: npx cucumber-js --exit
+
+    look how we defined cucumber.ts file: it will tell the path of feature files and step defs etc..
+    also we cannot use 'page' fixture here directly, coz page is coming from test() method of playwright
+    but we are not using test() method in case of cucumber
+    so we have to use browser() -> context () -> page() , context() is coming from browser type
+    that is: chromium.launch() or firefox.launch() etc..
+    in case of test(), all of this is necessary but it's hidden anad handled in a fixture called page
+    the browser(chromium ) is coming from playwright property of playwright/test method
+    read below::
+    In JavaScript (CommonJS): Older Node.js code used const playwright = require('@playwright/test'), which often returned a massive object containing everything.
+    In TypeScript (ESM): Modern TS uses Tree Shaking. The library is designed so you only "pull in" exactly what you need. This keeps your execution bundle small.
+
+So we need to do : import {chromium } from 'playwright/test'
+
+16. World constructor () -> sharing a state within one scenario <<IMPORTANTTTTT>>
+    instead of defining and using a variable with const or let, use this.var_name = assign_the_value
+    now, if we want to use the same variable in another step def or later any point, use it like
+    this.var_name , then it's not null , it will have the value. so, 'this' keyword has made the scope of the var across the stepdefs now. it's very IMPORTANT
+    this.PageManager = new PageManager();
+    now, we can use it: this.PageManager.methodXX
+
+    to run the specific tags: npx cucumber-js '@smoke OR @Reg' --exit
+
+    check the custom worldconstructor created , world.ts, hooks2.ts (used) and login_setup.ts where all combined..
+
+also, IMPORTANT to fetch/test the locators in the webapp UI, to know if they are good?
+go to js console -->
+const list = document.querySelectorAll('.v-card-text > .v-expansion-panels > .v-expansion-panel > .v-expansion-panel-title');
+const first = list[0];
+
+first.textContent
+
+inspect(first); --> this will jump on the element
+
+also,
+first.closest('.v-expansion-panel');
+
+find another ele:
+const panel = first.closest('.v-expansion-panel');
+const content = panel?.querySelector('.v-expansion-panel-content');
+
+checkout this repo:
+https://github.com/thananauto/playwright-cucumber-ts
