@@ -505,3 +505,9 @@ const content = panel?.querySelector('.v-expansion-panel-content');
 
 checkout this repo:
 https://github.com/thananauto/playwright-cucumber-ts
+
+there is also another use case of 'page' property:
+it provide a method on(), which can basically check anything like: console log etc, request or response etc..
+//why we need them is if we want to read throuh console log for specific 5xx/4xx errors or anything else
+page.on('console',() =>{})
+on method signature says, it will listen to an event
