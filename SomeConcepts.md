@@ -511,3 +511,67 @@ it provide a method on(), which can basically check anything like: console log e
 //why we need them is if we want to read throuh console log for specific 5xx/4xx errors or anything else
 page.on('console',() =>{})
 on method signature says, it will listen to an event
+
+//VERY Important for feature/cucumber setup..
+
+// features/support/world.ts
+import { IWorld, setWorldConstructor, World } from "@cucumber/cucumber";
+import { BrowserContext, Page } from "@playwright/test";
+import { LoginPage } from "../../pages/LoginPage";
+
+export interface ICustomWorld extends IWorld {
+context?: BrowserContext;
+page?: Page;
+loginPage?: LoginPage; // Our "Fixture"
+}
+
+export class CustomWorld extends World implements ICustomWorld {
+constructor(options: any) {
+super(options);
+}
+}
+
+setWorldConstructor(CustomWorld);
+
+Step 2: The Setup Hook (The Fixture Logic)
+This is where the actual Playwright "Fixture" lifecycle is managed manually.
+
+// features/support/hooks.ts
+import { Before, After, Status } from "@cucumber/cucumber";
+import { chromium } from "@playwright/test";
+import { ICustomWorld } from "./world";
+import { LoginPage } from "../../pages/LoginPage";
+
+Before(async function (this: ICustomWorld) {
+const browser = await chromium.launch({ headless: true });
+this.context = await browser.newContext();
+this.page = await this.context.newPage();
+
+// Dependency Injection: Initialize your Page Objects
+this.loginPage = new LoginPage(this.page);
+});
+
+After(async function (this: ICustomWorld) {
+await this.page?.close();
+await this.context?.close();
+});
+
+Step 3: The Step Definition
+Because we used this: ICustomWorld, we get full IntelliSense for our "fixtures."
+// features/steps/login.steps.ts
+import { Given, When, Then } from "@cucumber/cucumber";
+import { ICustomWorld } from "../support/world";
+
+Given('the user is on the login page', async function (this: ICustomWorld) {
+// We use the loginPage fixture initialized in the Hook
+await this.loginPage?.goto();
+});
+
+When('the user logs in with valid credentials', async function (this: ICustomWorld) {
+await this.loginPage?.login('standard_user', 'secret_sauce');
+});
+
+Then('the dashboard should be visible', async function (this: ICustomWorld) {
+// Directly using the page fixture for assertions
+const isVisible = await this.page?.isVisible('.dashboard');
+});
