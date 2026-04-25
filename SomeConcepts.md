@@ -28,22 +28,24 @@ as part of revising the concepts, have created this file..
    to run them: npm playwright run test command but add --grep @smoke in the end (for linux and mac)
    to run multi : --grep '@smokeAPI|@smokeUI' --> it will run with OR condition
 
-test steps : check how to add test steps in the scripts.. it's very useful to debug the report 5. ENV variables..
-env variables can be handled by multiple ways in JS/TS with playwright..
-URL: don't hard code the base URL. provide it in playwright config.ts and update 'use' block
-with baseURL: '', and in your tests we jsut do: page.goto('/')...
-How to change this URL for different ENVs.. (how do we handle that bit): Different for dev, Different for ST etc::
-Goto : Projects : create a 'use' block for that project and create a baseURL: '' there.
-To make more ENV variables in 'config' file and in order to make them available in other test spec files.. we need to create 'TestOptions.ts' and need to declare and assig the variable there
-(check the test-options.ts file)..
-once we have a ENV variable defined there, this can be imported to 'playwright.config.ts' file
-and defineCOnfig has to use it : defineConfig<TestOptions>({})
-now this new variable, is aviable and can used within 'global' or 'project level' 'use' block..
-note: before using it: we need to import the {test } from 'test-options' andnot from 'playwrightTests'... after that ew can use this newly created ENV var inside our scripts directly
-test('', async ({page, new_var}))
-Another way is ofcourse 'process ENV variable' -> this is best approach in many cases..
-Also another way is using plain JS/TS ternary operator::
-in baseURL : value in global use block, use ternary operator and based on the condition supplied use it.
+test steps : check how to add test steps in the scripts.. it's very useful to debug the report
+
+5. ENV variables..
+   env variables can be handled by multiple ways in JS/TS with playwright..
+   URL: don't hard code the base URL. provide it in playwright config.ts and update 'use' block
+   with baseURL: '', and in your tests we jsut do: page.goto('/')...
+   How to change this URL for different ENVs.. (how do we handle that bit): Different for dev, Different for ST etc::
+   Goto : Projects : create a 'use' block for that project and create a baseURL: '' there.
+   To make more ENV variables in 'config' file and in order to make them available in other test spec files.. we need to create 'TestOptions.ts' and need to declare and assig the variable there
+   (check the test-options.ts file)..
+   once we have a ENV variable defined there, this can be imported to 'playwright.config.ts' file
+   and defineCOnfig has to use it : defineConfig<TestOptions>({})
+   now this new variable, is aviable and can used within 'global' or 'project level' 'use' block..
+   note: before using it: we need to import the {test } from 'test-options' andnot from 'playwrightTests'... after that ew can use this newly created ENV var inside our scripts directly
+   test('', async ({page, new_var}))
+   Another way is ofcourse 'process ENV variable' -> this is best approach in many cases..
+   Also another way is using plain JS/TS ternary operator::
+   in baseURL : value in global use block, use ternary operator and based on the condition supplied use it.
 
 6. NOte about fixtures: if some of fixtures are not meant to be used inside the 'test' method but
    they do something in advance for us, and easy our work.
